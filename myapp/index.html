@@ -18,26 +18,30 @@
     </div>
 
     <script type="text/javascript">
-        function doTranslate() {
+        function getListStatus() {
             $.ajax({
-                'type':'GET',
-                'url':'http://master.hadoop:50070/webhdfs/v1/home/?',
-                'data':{op:'LISTSTATUS'},
-                'dataType':'json',
-                'success':function(resp) {
-			alert("sjflsdfjsf");
-                	//alert(response.FileStatuses.FileStatus[0].pathSuffix);  
+                type: "GET",
+                url: "http://localhost:3000/webhdfs/v1/home/?",
+                data: {op: "LISTSTATUS"},
+                dataType: "jsonp",
+
+                success: function(response) {
+                    var key, s = '/';
+                    for (key in response.FileStatuses.FileStatus) {
+                        s += response.FileStatuses.FileStatus[key].pathSuffix;
+                    }
+                    alert(s)
                 },
-		'error': function(e) {
-			alert("error: " + e);
-		}
+                error: function(e) {
+			         alert("error: " + e);
+                }
             });
         }
 
     </script>
 
-    <input type="text" id="sourceText" />
-    <input onclick="doTranslate()" type="button" value=" ok! "></input>
-    <!-- <div onclick="doTranslate()"> 翻译</div> -->
+    <input onclick="getListStatus()" type="button" value=" getListStatus ! "></input>
+    <input onclick="getListStatus()" type="button" value=" getListStatus ! "></input>
+
 </body>
 </html>

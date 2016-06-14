@@ -1,0 +1,27 @@
+doctype html
+html(lang="en")
+  head
+    title=title
+    script(src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js").
+  body
+    script(type="text/javascript").
+      function getListStatus() {
+        $.ajax({
+          type: "GET",
+          url: "http://localhost:3000/webhdfs/v1/home/?",
+          data: {op: "LISTSTATUS"},
+          dataType: "jsonp",
+          success: function(response) {
+            var key, s = '/';
+            for (key in response.FileStatuses.FileStatus) {
+              s += response.FileStatuses.FileStatus[key].pathSuffix;
+            }
+            alert(s)
+          },
+          error: function(e) {
+            alert("error: " + e);
+          }
+        });
+      }
+      
+    input(onclick="getListStatus()" type="button" value=" getListStatus ! ")
