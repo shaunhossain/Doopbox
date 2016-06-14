@@ -24,9 +24,13 @@
                 'url':'http://master.hadoop:50070/webhdfs/v1/home/?',
                 'data':{op:'LISTSTATUS'},
                 'dataType':'json',
-                'success':function(response) {
-                    alert(response.data.translations[0].translatedText);  
-                }        
+                'success':function(resp) {
+			alert("sjflsdfjsf");
+                	//alert(response.FileStatuses.FileStatus[0].pathSuffix);  
+                },
+		'error': function(e) {
+			alert("error: " + e);
+		}
             });
         }
 
