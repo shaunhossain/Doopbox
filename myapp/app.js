@@ -1,13 +1,16 @@
-var webhdfs = require('webhdfs');
-
-
 var express = require('express');
+var webhdfs = require('webhdfs');
+var swig = require('swig');
+
 var app = express();
 
-app.set('view engine', 'pug');
 
 app.get('/', function (request, response) {
-	response.render('index', { title: 'Doopbox', message: 'Hello there!'});
+	// response.render('index', { title: 'Doopbox', message: 'Hello there!'});
+	var page = swig.renderFile('templates/index.html', {
+		pagename: 'hahahahha'
+	});
+	response.send(page)
 });
 
 app.get('/webhdfs/v1/home/', function (reqest, response) {
