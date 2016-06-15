@@ -13,6 +13,8 @@ var hdfs = webhdfs.createClient({
 	port: svrPort
 });
 
+app.use('/static', express.static(__dirname + '/static'));
+
 
 app.get('/', function (request, response) {
 	// response.render('index', { title: 'Doopbox', message: 'Hello there!'});

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Doopbox</title>
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
+<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+<!--<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>-->
+<!--<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>-->
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <a class="brand" href="#">Doopbox</a>
+        </div>
+    </div>
+    <div id="main" class="container">
+    </div>
+
+    <script type="text/javascript">
+        function getListStatus() {
+            var dirName = encodeURIComponent(document.getElementById("dirName").value);
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:3000/webhdfs/v1/home/' + dirName + '/?',
+                data: {op: 'LISTSTATUS'},
+                dataType: 'jsonp',
+
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(e) {
+			         alert("error: " + e);
+                }
+            });
+        }
+        function putMakeDirs() {
+            var dirName = encodeURIComponent(document.getElementById("dirName").value);
+            $.ajax({
+                type: 'PUT',
+                url: 'http://localhost:3000/webhdfs/v1/home/' + dirName + '?op=MKDIRS',
+
+                success: function(response) {
+
+                    alert('mkdirs')
+                },
+                error: function(e) {
+                     alert("error: " + e);
+                }
+            });
+        }
+    </script>
+    <input type="text" id="dirName" value="t1" />
+    <input onclick="getListStatus()" type="button" value="LISTSTATUS"></input><br>
+    <input type="text" id="dirName" />
+    <input onclick="putMakeDirs()" type="button" value="MKDIRS    "></input>
+
+</body>
+</html>
