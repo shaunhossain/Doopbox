@@ -5,8 +5,6 @@ var bodyParser = require('body-parser')
 var mysql      = require('mysql');
 
 
-
-
 var app = express();
 
 var svrHost = '192.168.1.131';
@@ -35,10 +33,24 @@ app.get('/', function (request, response) {
 });
 
 app.get('/main/', function (request, response) {
+
 	var page = swig.renderFile('templates/main.html', {
 		pagename: 'hahahahha'
 	});
 	response.send(page)
+
+	/*var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/xushuai/?op=LISTSTATUS';
+	hdfs._sendRequest('GET', reqURL, '', function cb(err, res, body) {
+		// response.jsonp(body);
+
+		console.log(body);
+
+		var page = swig.renderFile('templates/main.html', {
+			pagename: 'hahahahha'
+		});
+		response.send(page)
+
+	});*/
 });
 
 app.get('/webhdfs/v1/*', function (request, response) {

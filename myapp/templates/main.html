@@ -2,13 +2,14 @@
 
 
 
+  {% block css %}
+    <link rel="stylesheet" href="https://idleberg.com/demo/Bootstrap-Listr-2/assets/css/listr.pack.css" />
+  {% endblock %}
+
+
   {% block js %}
-
-  <meta name="generator" content="Bootstrap Listr" />
-  <title>Bootstrap Listr 2</title>
-  <script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-53539506-1"]);_gaq.push(["_trackPageview"]);(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s)})();</script>
-  <link rel="stylesheet" href="https://idleberg.com/demo/Bootstrap-Listr-2/assets/css/listr.pack.css" />
-
+    <!--<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-53539506-1"]);_gaq.push(["_trackPageview"]);(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s)})();
+    </script>-->
   {% endblock %}
 
 
@@ -44,6 +45,50 @@
             </td>
           </tr>
         </tfoot>
+
+
+        <script type="text/javascript">
+        function getListStatus() {
+            var dirName = encodeURIComponent(document.getElementById("dirName").value);
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:3000/webhdfs/v1/home/' + dirName + '/?',
+                data: {op: 'LISTSTATUS'},
+                dataType: 'jsonp',
+
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(e) {
+			         alert("error: " + e);
+                }
+            });
+        }
+        function putMakeDirs() {
+            var dirName = encodeURIComponent(document.getElementById("dirName").value);
+            $.ajax({
+                type: 'PUT',
+                url: 'http://localhost:3000/webhdfs/v1/home/' + dirName + '?op=MKDIRS',
+
+                success: function(response) {
+
+                    alert('mkdirs')
+                },
+                error: function(e) {
+                     alert("error: " + e);
+                }
+            });
+        }
+        window.onload=getListStatus;
+    </script>
+      <input type="text" id="dirName" value="t1" />
+    <input onclick="getListStatus()" type="button" value="LISTSTATUS"></input><br>
+    <input type="text" id="dirName" />
+    <input onclick="putMakeDirs()" type="button" value="MKDIRS    "></input>
+
+
+
+
         <tbody>
           <tr>
             <td class="text-muted text-right" data-sort-value="1">1</td>            <td class="text-left" data-sort-value="checksum"><i class="fa fa-folder "></i>&nbsp;<a href="Checksum/" ><strong>Checksum</strong></a></td>
