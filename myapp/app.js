@@ -1,6 +1,11 @@
 var express = require('express');
 var webhdfs = require('webhdfs');
 var swig = require('swig');
+var bodyParser = require('body-parser')
+var mysql      = require('mysql');
+
+
+
 
 var app = express();
 
@@ -13,12 +18,24 @@ var hdfs = webhdfs.createClient({
 	port: svrPort
 });
 
-app.use('/static', express.static(__dirname + '/static'));
+
+
+// config 
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+app.use('/assets', express.static(__dirname + '/assets'));
 
 
 app.get('/', function (request, response) {
 	// response.render('index', { title: 'Doopbox', message: 'Hello there!'});
 	var page = swig.renderFile('templates/index.html', {
+		pagename: 'hahahahha'
+	});
+	response.send(page)
+});
+
+app.get('/main/', function (request, response) {
+	var page = swig.renderFile('templates/main.html', {
 		pagename: 'hahahahha'
 	});
 	response.send(page)
@@ -63,14 +80,38 @@ app.put('/webhdfs/v1/*', function (request, response) {
 
 });
 
+app.post('/signin/', function (request, response) {
+	var username = request.body.username;
+	var password = request.body.password;
 
+	var connection = mysql.createConnection({
+		host: 'localhost',
+		user: 'root',
+		database: 'doopbox',
+		password: '123456'
+	});
+	connection.connect();
 
+	var sql = 'select * from account where username=' + '\"' + username + '\"' + 'and password=password(' + password + ')';
+	connection.query(sql, function(err, results) {
+  		if (err) throw err;
+  		console.log('The solution is: ', results);
 
+  		if (results.length > 0) {
+  			// verify ok.
+  			// response.send(username + '  ' + password);
+  			response.redirect('/main/');
 
+  		} else {
+  			
 
+  		}
+	});
 
+	connection.end();
 
-
+	
+});
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');

@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
 
-  {% block custom_styles %}
-    <link href="/static/css/index.css" rel="stylesheet">
-  {% endblock custom_styles %}
+  {% block css %}
+    <link href="/assets/css/index.css" rel="stylesheet">
+  {% endblock %}
 
   {% block main %}
     <div class="container">
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="http://allmyproject.oss-cn-beijing.aliyuncs.com/Doopbox/img/1.png" />
             <p id="profile-name" class="profile-name-card">Username or email address </p>
-            <form class="form-signin">
+            <form class="form-signin" action="/signin/" method="post">
                 <span id="reauth-email" class="reauth-email"></span>
-                <input type="text" id="inputEmail" class="form-control" placeholder="Username or email address" >
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password">
+                <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Username or email address" >
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password">
                
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
             </form>
-            <a href="#" class="forgot-password"><span id="esq">esqueceu a senha?</span></a>     <a href="#" class="forgot-password"><span id="dir">cadastre-se</span></a>
+            <a href="#" class="forgot-password"><span id="esq">esqueceu a senha?</span></a>     
+            <a href="#" class="forgot-password"><span id="dir">cadastre-se</span></a>
         </div>
     </div>
-  {% endblock main %}
+  {% endblock %}

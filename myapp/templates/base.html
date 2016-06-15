@@ -14,14 +14,17 @@
   <title>Doopbox</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
 
-  {% block custom_styles %}
+  {% block css %}
   {% endblock %}
 
   <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
   <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-  <script src="/static/js/ie-emulation-modes-warning.js"></script>
+  <script src="/assets/js/ie-emulation-modes-warning.js"></script>
+
+  {% block js %}
+  {% endblock %}
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -30,20 +33,11 @@
   <![endif]-->
 </head>
 
+<!--<body dir="ltr">-->
 <body>
-  <div class="container">
-    {% block breadcrumb_nav %}
-    {% endblock breadcrumb_nav %}
-  </div>
+  {% block main %}
+  {% endblock %}
 
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-8 blog-main">
-        {% block main %}
-        {% endblock %}
-      </div>
-    </div>
-  </div>
 
   <footer class="blog-footer">
   </footer>
@@ -51,15 +45,13 @@
   <!-- Bootstrap core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
-  <script src="/static/js/jquery.min.js"></script>
-  <script src="/static/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="/static/js/jquery.githubRepoWidget.min.js"></script>
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/assets/js/jquery.githubRepoWidget.min.js"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
-  <script src="/static/js/jquery.bootstrap-autohidingnavbar.min.js"></script>
-  <script>
-      $("div.navbar-fixed-top").autoHidingNavbar();
-  </script>
+  <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+  <script src="/assets/js/jquery.bootstrap-autohidingnavbar.min.js"></script>
+  <!--<script src="/assets/js/listr.pack.js"></script>-->
 </body>
 </html>
 
