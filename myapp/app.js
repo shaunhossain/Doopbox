@@ -32,14 +32,19 @@ app.get('/', function (request, response) {
 	response.send(page)
 });
 
-app.get('/main/', function (request, response) {
+app.get('/main/*', function (request, response) {
 
-	/*var page = swig.renderFile('templates/main.html', {
-		pagename: 'hahahahha'
-	});
-	response.send(page)*/
+	console.log(request.path);
+	console.log(request.baseUrl);
+	console.log(request.originalUrl);
 
 	var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/xushuai/?op=LISTSTATUS';
+
+
+
+
+
+
 	hdfs._sendRequest('GET', reqURL, '', function cb(err, res, body) {
 
 		console.log(body);
@@ -54,7 +59,6 @@ app.get('/main/', function (request, response) {
 
 app.get('/webhdfs/v1/*', function (request, response) {
 
-	var oriUrl = request.originalUrl;
 	var path = request.params[0];
 	var op = request.query.op;
 	var reqURL = 'http://' + svrHost + ':' + svrPort + request.path + '?op=' + op;
