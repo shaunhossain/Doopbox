@@ -73,38 +73,26 @@
         </tfoot>
 
 
-
-
-
         <tbody id="file-list">
         {% for file in data.FileStatuses.FileStatus %}
           <tr>
             <td class="text-muted text-right" data-sort-value="{{loop.index}}">{{loop.index}}</td>            
             <td class="text-left" data-sort-value="{{file.pathSuffix}}">
-              {% if file.type === 'DIRECTORY' %}
-                <i class="fa fa-folder"></i>&nbsp;
-                <a href="{{file.pathSuffix}}">
+              <i {% if file.type == 'DIRECTORY' %} class="fa fa-folder" {% else %} class="fa fa-file-text-o" {% endif %}>
+              </i>&nbsp;
+              <a href="{{file.pathSuffix}}">
+                {% if file.type == 'DIRECTORY' %}
                   <strong>{{file.pathSuffix}}</strong>
-                </a>
-              {% else %}
-                <i class="fa fa-file-text-o"></i>&nbsp;
-                <a href="{{file.pathSuffix}}">
+                {% else %}
                   {{file.pathSuffix}}
-                </a>
-              {% endif %}
+                {% endif %}
+              </a>
             </td>
             <td class="text-right" data-sort-value="0">&mdash;</td>
             <td class="text-right" data-sort-value="{{file.modificationTime}}" title="2016-04-15 23:43:56">1 month ago</td>
           </tr>
         {% endfor %}
-
         </tbody>       
-
-
-
-
-
-
 
 
       </table>
