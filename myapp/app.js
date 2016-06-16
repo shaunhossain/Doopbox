@@ -32,14 +32,19 @@ app.get('/', function (request, response) {
 	response.send(page)
 });
 
-app.get('/main/*', function (request, response) {
+app.get('/home/*', function (request, response) {
 
-	console.log(request.path);
-	console.log(request.baseUrl);
-	console.log(request.originalUrl);
+	var path = request.params[0];
 
-	var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/xushuai/?op=LISTSTATUS';
+	console.log('------>' + path)
 
+	path = '/home/' + 'xushuai/' + path;
+
+
+
+	var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=LISTSTATUS';
+
+	console.log(reqURL);
 
 
 
@@ -115,7 +120,7 @@ app.post('/signin/', function (request, response) {
   		if (results.length > 0) {
   			// verify ok.
   			// response.send(username + '  ' + password);
-  			response.redirect('/main/');
+  			response.redirect('/home/');
 
   		} else {
   			
