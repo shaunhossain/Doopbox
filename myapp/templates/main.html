@@ -3,7 +3,7 @@
 
 
   {% block css %}
-    <link rel="stylesheet" href="https://idleberg.com/demo/Bootstrap-Listr-2/assets/css/listr.pack.css" />
+    <link rel="stylesheet" href="/assets/css/listr.pack.css" />
   {% endblock %}
 
 
@@ -41,60 +41,69 @@
           <tr>
             <td colspan="4">
               <small class="pull-left text-muted" dir="ltr">3 folders and 15 files, 17.62 MB in total</small>
-              <a class="pull-right small text-muted" href="https://github.com/idleberg/Bootstrap-Listr" title="Bootstrap Listr on GitHub" target="_blank">Fork me on GitHub</a>
+              <!--<a class="pull-right small text-muted" href="https://github.com/idleberg/Bootstrap-Listr" title="Bootstrap Listr on GitHub" target="_blank">Fork me on GitHub</a> -->
             </td>
           </tr>
         </tfoot>
 
 
-        <script type="text/javascript">
-        function getListStatus() {
-            var dirName = encodeURIComponent(document.getElementById("dirName").value);
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:3000/webhdfs/v1/home/' + dirName + '/?',
-                data: {op: 'LISTSTATUS'},
-                dataType: 'jsonp',
-
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(e) {
-			         alert("error: " + e);
-                }
-            });
-        }
-        function putMakeDirs() {
-            var dirName = encodeURIComponent(document.getElementById("dirName").value);
-            $.ajax({
-                type: 'PUT',
-                url: 'http://localhost:3000/webhdfs/v1/home/' + dirName + '?op=MKDIRS',
-
-                success: function(response) {
-
-                    alert('mkdirs')
-                },
-                error: function(e) {
-                     alert("error: " + e);
-                }
-            });
-        }
-        window.onload=getListStatus;
-    </script>
-      <input type="text" id="dirName" value="t1" />
-    <input onclick="getListStatus()" type="button" value="LISTSTATUS"></input><br>
-    <input type="text" id="dirName" />
-    <input onclick="putMakeDirs()" type="button" value="MKDIRS    "></input>
-
-
-
 
         <tbody>
+        {% for file in data.FileStatuses.FileStatus %}
           <tr>
-            <td class="text-muted text-right" data-sort-value="1">1</td>            <td class="text-left" data-sort-value="checksum"><i class="fa fa-folder "></i>&nbsp;<a href="Checksum/" ><strong>Checksum</strong></a></td>
+            <td class="text-muted text-right" data-sort-value="1">1</td>            
+            <td class="text-left" data-sort-value="{{file.pathSuffix}}">
+              {% if file.type === 'DIRECTORY' %}
+                <i class="fa fa-folder"></i>&nbsp;
+                <a href="{{file.pathSuffix}}">
+                  <strong>{{file.pathSuffix}}</strong>
+                </a>
+              {% else %}
+                <i class="fa fa-code"></i>&nbsp;
+                <a href="{{file.pathSuffix}}">
+                  {{file.pathSuffix}}
+                </a>
+              {% endif %}
+            </td>
             <td class="text-right" data-sort-value="0">&mdash;</td>
-            <td class="text-right" data-sort-value="1460763836" title="2016-04-15 23:43:56">1 month ago</td>
+            <td class="text-right" data-sort-value="{{file.modificationTime}}" title="2016-04-15 23:43:56">1 month ago</td>
           </tr>
+        {% endfor %}
+
+
+          <tr>
+            <td class="text-muted text-right" data-sort-value="12">12</td>            
+            <td class="text-left" data-sort-value="source-gulpfile.js">
+              <i class="fa fa-code "></i>&nbsp;
+              <a href="source-gulpfile.js" class="source-modal" data-highlight="true" data-modified="777 bytes">
+              source-gulpfile.js
+              </a>
+              </td>
+            <td class="text-right" data-sort-value="777" title="777 bytes">777 bytes</td>
+            <td class="text-right" data-sort-value="1460763842" title="2016-04-15 23:44:02">1 month ago</td>
+          </tr>
+
+
+
+
+             <tr>
+            <td class="text-muted text-right" data-sort-value="4">4</td>            
+            <td class="text-left" data-sort-value="audio-ear_andrew_pekler_1.ogg">
+              <i class="fa fa-music "></i>&nbsp;<a href="audio-ear_andrew_pekler_1.ogg" class="audio-modal"  data-modified="350.42 KB">audio-ear_andrew_pekler_1.ogg</a></td>
+            <td class="text-right" data-sort-value="358832" title="358832 bytes">350.42 KB</td>
+            <td class="text-right" data-sort-value="1460763835" title="2016-04-15 23:43:55">1 month ago</td>
+          </tr>
+
+
+   
+
+        	
+
+
+
+
+        
+     
           <tr>
             <td class="text-muted text-right" data-sort-value="2">2</td>            <td class="text-left" data-sort-value="icon examples"><i class="fa fa-folder "></i>&nbsp;<a href="Icon%20Examples/" ><strong>Icon Examples</strong></a></td>
             <td class="text-right" data-sort-value="0">&mdash;</td>
@@ -105,11 +114,7 @@
             <td class="text-right" data-sort-value="0">&mdash;</td>
             <td class="text-right" data-sort-value="1460763862" title="2016-04-15 23:44:22">1 month ago</td>
           </tr>
-          <tr>
-            <td class="text-muted text-right" data-sort-value="4">4</td>            <td class="text-left" data-sort-value="audio-ear_andrew_pekler_1.ogg"><i class="fa fa-music "></i>&nbsp;<a href="audio-ear_andrew_pekler_1.ogg" class="audio-modal"  data-modified="350.42 KB">audio-ear_andrew_pekler_1.ogg</a></td>
-            <td class="text-right" data-sort-value="358832" title="358832 bytes">350.42 KB</td>
-            <td class="text-right" data-sort-value="1460763835" title="2016-04-15 23:43:55">1 month ago</td>
-          </tr>
+     
           <tr>
             <td class="text-muted text-right" data-sort-value="5">5</td>            <td class="text-left" data-sort-value="audio-ear_andrew_pekler_7.mp3"><i class="fa fa-music "></i>&nbsp;<a href="audio-ear_andrew_pekler_7.mp3" class="audio-modal"  data-modified="125.49 KB">audio-ear_andrew_pekler_7.mp3</a></td>
             <td class="text-right" data-sort-value="128503" title="128503 bytes">125.49 KB</td>
@@ -145,11 +150,7 @@
             <td class="text-right" data-sort-value="17896" title="17896 bytes">17.48 KB</td>
             <td class="text-right" data-sort-value="1460763842" title="2016-04-15 23:44:02">1 month ago</td>
           </tr>
-          <tr>
-            <td class="text-muted text-right" data-sort-value="12">12</td>            <td class="text-left" data-sort-value="source-gulpfile.js"><i class="fa fa-code "></i>&nbsp;<a href="source-gulpfile.js" class="source-modal" data-highlight="true" data-modified="777 bytes">source-gulpfile.js</a></td>
-            <td class="text-right" data-sort-value="777" title="777 bytes">777 bytes</td>
-            <td class="text-right" data-sort-value="1460763842" title="2016-04-15 23:44:02">1 month ago</td>
-          </tr>
+
           <tr>
             <td class="text-muted text-right" data-sort-value="13">13</td>            <td class="text-left" data-sort-value="source-prettify.css"><i class="fa fa-code "></i>&nbsp;<a href="source-prettify.css" class="source-modal" data-highlight="true" data-modified="815 bytes">source-prettify.css</a></td>
             <td class="text-right" data-sort-value="815" title="815 bytes">815 bytes</td>

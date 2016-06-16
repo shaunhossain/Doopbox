@@ -7,7 +7,7 @@ var mysql      = require('mysql');
 
 var app = express();
 
-var svrHost = '192.168.1.131';
+var svrHost = '192.168.199.70';
 var svrPort = 50070;
 
 var hdfs = webhdfs.createClient({
@@ -34,23 +34,22 @@ app.get('/', function (request, response) {
 
 app.get('/main/', function (request, response) {
 
-	var page = swig.renderFile('templates/main.html', {
+	/*var page = swig.renderFile('templates/main.html', {
 		pagename: 'hahahahha'
 	});
-	response.send(page)
+	response.send(page)*/
 
-	/*var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/xushuai/?op=LISTSTATUS';
+	var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/xushuai/?op=LISTSTATUS';
 	hdfs._sendRequest('GET', reqURL, '', function cb(err, res, body) {
-		// response.jsonp(body);
 
 		console.log(body);
 
 		var page = swig.renderFile('templates/main.html', {
-			pagename: 'hahahahha'
-		});
+			data: body
+		}); 
 		response.send(page)
 
-	});*/
+	});
 });
 
 app.get('/webhdfs/v1/*', function (request, response) {
