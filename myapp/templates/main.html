@@ -4,6 +4,7 @@
 
   {% block css %}
     <link rel="stylesheet" href="/assets/css/listr.pack.css" />
+
   {% endblock %}
 
 
@@ -17,6 +18,16 @@
 
 
   {% block main %}
+
+  <style type="text/css">
+
+.highlight { 
+  background-color: rgba(204,230,250,0.5) ! important;
+}
+</style>
+
+
+
 
   <div class="container">
     <ol class="breadcrumb" dir="ltr">
@@ -61,7 +72,7 @@
           </tr>
         </tfoot>
 
-        <tbody>
+        <tbody id="file-list">
         {% for file in data.FileStatuses.FileStatus %}
           <tr>
             <td class="text-muted text-right" data-sort-value="{{loop.index}}">{{loop.index}}</td>            
@@ -121,6 +132,24 @@
       </div>
     </div>
   </div>
+
+  <script type="text/javascript">
+    $("#file-list tr").click(function(event) {
+      var selected = $(this).hasClass("highlight");
+      $("#file-list tr").removeClass("highlight");
+      if(!selected)
+        $(this).addClass("highlight");
+      event.stopPropagation();
+    });
+
+    $(document).click(function() {
+      $("#file-list tr").removeClass("highlight");
+    });
+
+  </script>
+
+
+
   {% endblock %}
  
 
