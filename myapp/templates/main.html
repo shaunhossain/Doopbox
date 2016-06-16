@@ -10,14 +10,19 @@
   {% block js %}
     <!--<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-53539506-1"]);_gaq.push(["_trackPageview"]);(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s)})();
     </script>-->
+
+
+
   {% endblock %}
 
 
   {% block main %}
+
   <div class="container">
     <ol class="breadcrumb" dir="ltr">
       <li><a href="/demo/Bootstrap-Listr-2"><i class="fa fa-home fa-lg fa-fw"></i> </a></li>
     </ol>
+
     <div class="row">
       <div class="col-xs-6 col-sm-4 col-md-3 col-xs-offset-6 col-sm-offset-8 col-md-offset-9">
           <div class="form-group has-feedback">
@@ -27,8 +32,17 @@
          </div>
       </div>
     </div>
+
+
+    <ul class="nav nav-pills">
+      <li role="presentation"><a href="#">Download</a></li>
+      <li role="presentation"><a href="#">Delete</a></li>
+    </ul>
+
+
     <div class="table-responsive">
       <table id="bs-table" class="table table-hover">
+
         <thead>
           <tr>
             <th class="text-right" data-sort="int">#</th>
@@ -37,6 +51,7 @@
             <th class="col-sm-2 text-right" data-sort="int">Modified</th>
           </tr>
         </thead>
+
         <tfoot>
           <tr>
             <td colspan="4">
