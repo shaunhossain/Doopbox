@@ -33,23 +33,24 @@ app.get('/', function (request, response) {
 	response.send(page)
 });
 
+/* match example: 
+ * /home
+ * /home//
+ * /home//sljff
+ * /home/a/b/c//
+ * /home/a/b/c//sfjiew
+ */
+app.get('/home$|home*//+*', function (request, response) {
+	var path = request.originalUrl;
+	response.redirect('/home/');
+});
 
 app.get('/home*', function (request, response) {
 
 	var path = request.params[0];
-
-	console.log('------>' + path)
-
-	path = '/home/' + 'xushuai' + path;
-
-
+	path = '/home/' + 't1' + path;
 
 	var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=LISTSTATUS';
-
-	console.log(reqURL);
-
-
-
 
 
 	hdfs._sendRequest('GET', reqURL, '', function cb(err, res, body) {
@@ -64,11 +65,38 @@ app.get('/home*', function (request, response) {
 	});
 });
 
+app.get('/dbox/v1/*', function (request, response) {
+
+	var path = request.params[0];
+	var op = request.query.op;
+	var redirect_path = ('/home/' + path).slice(0, -1);
+	redirect_path = redirect_path.substring(0, redirect_path.lastIndexOf('/') + 1);
+
+	console.log("xxxx======------->  " + redirect_path);
+
+	console.log(path);
+
+	path = '/home/' + 't1/' + path;
+
+	var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=' + op + '&recursive=true';
+
+
+	console.log(reqURL);
 
 
 
-
-
+	switch (op) {
+		case 'DELETE':
+			hdfs._sendRequest('DELETE', reqURL, '', function cb(err, res, body) {
+				var page = swig.renderFile('templates/main.html', {
+					data: body
+				});
+				response.redirect(redirect_path);
+				//response.send(page)
+			});
+			break;
+	}
+});
 
 
 app.get('/webhdfs/v1/*', function (request, response) {

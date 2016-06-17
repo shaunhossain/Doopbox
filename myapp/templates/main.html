@@ -45,12 +45,12 @@
 
     <ul class="nav nav-pills">
       <li role="presentation">
-        <a href="/download" onclick="updateLink(this);">
+        <a href="/download" onclick="updateLink(this, 'DOWNLOAD');">
           <button>下载</button>
         </a>
       </li>
       <li role="presentation">
-        <a href="/delete" onclick="updateLink(this);">
+        <a href="/dbox/v1/<path>?op=DELETE" onclick="updateLink(this, 'DELETE');">
           <button>删除</button>
         </a>
       </li>
@@ -163,9 +163,10 @@
       var fileName = t.getAttribute('href');
       return fileName;
     }
-    function updateLink(a) {
-      a.href = a.href + window.location.pathname + getTargetFileName();
-      alert(a.href);
+    function updateLink(a, op) {
+      var path = window.location.pathname.slice(5, -1) + '/' + getTargetFileName();
+      a.href = '/dbox/v1' + path + '?op=' + op;
+      //alert(a.href);
     }
   </script>
 
