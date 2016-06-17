@@ -19,14 +19,13 @@
 
   {% block main %}
 
+
   <style type="text/css">
 
-.highlight { 
+.target_file { 
   background-color: rgba(204,230,250,0.5) ! important;
 }
 </style>
-
-
 
 
   <div class="container">
@@ -44,12 +43,18 @@
       </div>
     </div>
 
-
     <ul class="nav nav-pills">
-      <li role="presentation"><a href="#">Download</a></li>
-      <li role="presentation"><a href="#">Delete</a></li>
+      <li role="presentation">
+        <a href="/download" onclick="updateLink(this);">
+          <button>下载</button>
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="/delete">
+          <button onclick="getTargetFileName()">删除</button>
+        </a>
+      </li>
     </ul>
-
 
     <div class="table-responsive">
       <table id="bs-table" class="table table-hover">
@@ -73,7 +78,7 @@
         </tfoot>
 
 
-        <tbody id="file-list">
+        <tbody id="file_list">
         {% for file in data.FileStatuses.FileStatus %}
           <tr>
             <td class="text-muted text-right" data-sort-value="{{loop.index}}">{{loop.index}}</td>            
@@ -137,22 +142,34 @@
     </div>
   </div>
 
-  <script type="text/javascript">
-    $("#file-list tr").click(function(event) {
-      var selected = $(this).hasClass("highlight");
-      $("#file-list tr").removeClass("highlight");
-      if(!selected)
-        $(this).addClass("highlight");
+
+
+<script type="text/javascript">
+    $('#file_list tr').click(function(event) {
+      var selected = $(this).hasClass('target_file');
+      $('#file_list tr').removeClass('target_file');
+      if(!selected) {
+        $(this).addClass('target_file');
+      }
       event.stopPropagation();
     });
-
     $(document).click(function() {
-      $("#file-list tr").removeClass("highlight");
+      $('#file_list tr').removeClass('target_file');
     });
-
+    function getTargetFileName() {
+      var t = document.getElementsByClassName('target_file')[0];
+      t = t.getElementsByClassName('text-left')[0].getElementsByTagName('a')[0];
+      var fileName = t.getAttribute('href');
+      return fileName;
+    }
+    function updateLink(a) {
+      //a.href = a.href + window.location.pathname + getTargetFileName();
+      //alert(a.href);
+      alert(window.location.pathname);
+    }
   </script>
 
-
+ 
 
   {% endblock %}
  

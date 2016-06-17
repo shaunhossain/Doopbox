@@ -7,7 +7,7 @@ var mysql      = require('mysql');
 
 var app = express();
 
-var svrHost = '192.168.1.115';
+var svrHost = '192.168.193.7';
 var svrPort = 50070;
 
 var hdfs = webhdfs.createClient({
