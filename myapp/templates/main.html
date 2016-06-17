@@ -85,13 +85,14 @@
             <td class="text-left" data-sort-value="{{file.pathSuffix}}">
               <i {% if file.type == 'DIRECTORY' %} class="fa fa-folder" {% else %} class="fa fa-file-text-o" {% endif %}>
               </i>&nbsp;
-              <a href="{{file.pathSuffix}}">
-                {% if file.type == 'DIRECTORY' %}
+              {% if file.type == 'DIRECTORY' %}
+                <a href="{{file.pathSuffix}}\">
                   <strong>{{file.pathSuffix}}</strong>
-                {% else %}
+              {% else %}
+                <a href="{{file.pathSuffix}}">
                   {{file.pathSuffix}}
-                {% endif %}
-              </a>
+              {% endif %}
+                </a>
             </td>
             <td class="text-right" data-sort-value="0">&mdash;</td>
             <td class="text-right" data-sort-value="{{file.modificationTime}}" title="2016-04-15 23:43:56">1 month ago</td>
@@ -163,9 +164,8 @@
       return fileName;
     }
     function updateLink(a) {
-      //a.href = a.href + window.location.pathname + getTargetFileName();
-      //alert(a.href);
-      alert(window.location.pathname);
+      a.href = a.href + window.location.pathname + getTargetFileName();
+      alert(a.href);
     }
   </script>
 

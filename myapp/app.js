@@ -25,6 +25,7 @@ app.use('/assets', express.static(__dirname + '/assets'));
 
 
 app.get('/', function (request, response) {
+
 	// response.render('index', { title: 'Doopbox', message: 'Hello there!'});
 	var page = swig.renderFile('templates/index.html', {
 		pagename: 'hahahahha'
@@ -32,13 +33,14 @@ app.get('/', function (request, response) {
 	response.send(page)
 });
 
-app.get('/home/*', function (request, response) {
+
+app.get('/home*', function (request, response) {
 
 	var path = request.params[0];
 
 	console.log('------>' + path)
 
-	path = '/home/' + 'xushuai/' + path;
+	path = '/home/' + 'xushuai' + path;
 
 
 
@@ -61,6 +63,13 @@ app.get('/home/*', function (request, response) {
 
 	});
 });
+
+
+
+
+
+
+
 
 app.get('/webhdfs/v1/*', function (request, response) {
 
