@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session');
 var webhdfs = require('webhdfs');
 var swig = require('swig');
 var bodyParser = require('body-parser')
@@ -23,8 +24,23 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use('/assets', express.static(__dirname + '/assets'));
 
+app.use(session({secret: '1234567890'}));
+
+
+
+var sess;
 
 app.get('/', function (request, response) {
+
+	sess = request.session;
+
+
+	sess.username;
+
+
+
+
+	console.log('session ==== >> ' + sess)
 
 	// response.render('index', { title: 'Doopbox', message: 'Hello there!'});
 	var page = swig.renderFile('templates/index.html', {
@@ -32,6 +48,11 @@ app.get('/', function (request, response) {
 	});
 	response.send(page)
 });
+
+
+
+
+
 
 /* match example: 
  * /home
@@ -47,7 +68,17 @@ app.get('/home$|home*//+*', function (request, response) {
 
 app.get('/home*', function (request, response) {
 
+
+	console.log('========>>>>  '  +  request.session.username);
+
+
+
+
 	var path = request.params[0];
+
+
+
+
 	path = '/home/' + 't1' + path;
 	
 	var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=LISTSTATUS';
@@ -155,7 +186,12 @@ app.post('/signin/', function (request, response) {
   		if (results.length > 0) {
   			// verify ok.
   			// response.send(username + '  ' + password);
+
+  			sess.username = username;
+
   			response.redirect('/home/');
+
+
   		} else {
   			
 
