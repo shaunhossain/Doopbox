@@ -1,1 +1,22 @@
 {% extends 'base.html' %}
+
+  {% block css %}
+    <link href="/assets/css/index.css" rel="stylesheet">
+  {% endblock %}
+
+  {% block main %}
+    <div class="container">
+        <div class="card card-container">
+            <p id="profile-name" class="profile-name-card">Doopbox</p>
+            <form class="form-signin" action="/signin/" method="post">
+                <span id="reauth-email" class="reauth-email">Username</span>
+                <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Username" >
+                <span id="reauth-email" class="reauth-email">Email Address</span>
+                <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Email Address" >
+                <span id="reauth-email" class="reauth-email">Password</span>
+                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password">
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Create an account</button>
+            </form>
+        </div>
+    </div>
+  {% endblock %}
