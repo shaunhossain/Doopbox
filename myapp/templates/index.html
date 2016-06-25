@@ -8,16 +8,15 @@
     <div class="container">
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="/assets/img/1.png" />
-            <p id="profile-name" class="profile-name-card">Username or email address </p>
+            <p id="profile-name" class="profile-name-card">Doopbox</p>
             <form class="form-signin" action="/signin/" method="post">
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="text" id="inputEmail" name="username" class="form-control" placeholder="Username or email address" >
                 <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password">
-               
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
             </form>
-            <a href="#" class="forgot-password"><span id="esq">esqueceu a senha?</span></a>     
-            <a href="#" class="forgot-password"><span id="dir">cadastre-se</span></a>
+            <span id="esq">New to Doopbox?</span>
+            <a href="/signup/" class="forgot-password"><span id="dir">Create an account.</span></a>
         </div>
     </div>
   {% endblock %}

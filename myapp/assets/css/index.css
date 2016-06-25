@@ -1,11 +1,13 @@
 body, html {
     height: 100%;
     background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(202, 223, 231),rgb(222,243,251));
+    /*background-image: linear-gradient(rgb(202, 223, 231),rgb(222,243,251));*/
+    background-color: #f9f9f9
 }
 
 .card-container.card {
     width: 350px;
+    height: 506px;
     padding: 40px 40px;
 }
 

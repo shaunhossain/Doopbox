@@ -7,7 +7,7 @@ var mysql      = require('mysql');
 
 var app = express();
 
-var svrHost = '192.168.193.7';
+var svrHost = '192.168.1.100';
 var svrPort = 50070;
 
 var hdfs = webhdfs.createClient({
@@ -49,7 +49,7 @@ app.get('/home*', function (request, response) {
 
 	var path = request.params[0];
 	path = '/home/' + 't1' + path;
-
+	
 	var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=LISTSTATUS';
 
 
@@ -84,7 +84,6 @@ app.get('/dbox/v1/*', function (request, response) {
 	console.log(reqURL);
 
 
-
 	switch (op) {
 		case 'DELETE':
 			hdfs._sendRequest('DELETE', reqURL, '', function cb(err, res, body) {
@@ -97,7 +96,6 @@ app.get('/dbox/v1/*', function (request, response) {
 			break;
 	}
 });
-
 
 app.get('/webhdfs/v1/*', function (request, response) {
 
@@ -158,18 +156,72 @@ app.post('/signin/', function (request, response) {
   			// verify ok.
   			// response.send(username + '  ' + password);
   			response.redirect('/home/');
-
   		} else {
   			
 
   		}
 	});
-
 	connection.end();
-
-	
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+
+app.post('/signup/', function (request, response) {
+	var username = request.body.username;
+	var password = request.body.password;
+	var repassword = request.body.repassword;
+	var email = request.body.email;
+
+	var connection = mysql.createConnection({
+		host: 'localhost',
+		user: 'root',
+		database: 'doopbox',
+		password: '123456'
+	});
+
+	var sql = 'select * from account where username=' + '\"' + username + '\"';
+	connection.query(sql, function(err, results) {
+  		if (err) throw err;
+  		if (results.length > 0) {
+  			// account exists.
+  			response.redirect('/signup/');
+  		} else {
+  			// insert account recoard.
+  			sql = 'insert into account(`username`, `password`, `email`) values(' 
+	  			+ '\"' + username + '\"' + ', password(' + '\"' 
+	  			+ password + '\"' + '),' + '\"' + email + '\")';
+			connection.query(sql, function(err, results) {
+  				if (err) throw err;
+  				var accid = results.insertId;
+  				// request HDFS mkdir.
+  				var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/' + accid + '?op=MKDIRS';
+  				console.log(reqURL);
+  				hdfs._sendRequest('PUT', reqURL, '', function cb(err, res, body) {
+					response.redirect('/signup/');
+				});  				
+			});
+		}
+	});
+
+	//connection.end();
+
+});
+
+
+
+
+
+
+
+app.get('/signup/', function (request, response) {
+
+	console.log('lsfjlsdflsfslfjsjfsjfskfslfj')
+
+	var page = swig.renderFile('templates/signup.html', {
+		pagename: 'hahahahha'
+	});
+	response.send(page)
+});
+
+app.listen(8080, function () {
+  console.log('Example app listening on port 8080!');
 });
