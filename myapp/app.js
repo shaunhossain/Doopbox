@@ -300,6 +300,6 @@ app.get('/signup/', function (request, response) {
 	response.send(page)
 });
 
-app.listen(8080, function () {
+app.listen(80, function () {
   console.log('Example app listening on port 8080!');
 });
