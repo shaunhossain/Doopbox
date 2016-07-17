@@ -12,12 +12,26 @@
     <!--<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-53539506-1"]);_gaq.push(["_trackPageview"]);(function(){var ga=document.createElement("script");ga.type="text/javascript";ga.async=true;ga.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga,s)})();
     </script>-->
 
-
-
   {% endblock %}
 
 
   {% block main %}
+
+   <style type="text/css">
+
+  input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+</style>
+
+
 
 
   <style type="text/css">
@@ -27,18 +41,73 @@
 }
 </style>
 
-
   <div class="container">
     <ol class="breadcrumb" dir="ltr">
-      <li><a href="/home/"><i class="fa fa-home fa-lg fa-fw"></i> </a></li>
+
+      <li>
+        <a href="/home/"><i class="fa fa-home fa-lg fa-fw"></i></a>
+      </li>
+
+    {% block breadcrumbs %}
+
+    {% for b in breadcrumbs %}
+      <li>
+        <a href="{{b.url}}">{{b.name}}<i class="fa fa-lg"></i></a>
+      </li>
+    {% endfor %}
+
+    {% endblock %}
+
     </ol>
 
     <div class="row">
       <div class="col-xs-6 col-sm-4 col-md-3 col-xs-offset-6 col-sm-offset-8 col-md-offset-9">
           <div class="form-group has-feedback">
-            <label class="control-label sr-only" for="search">Search</label>
-            <input type="text" class="form-control" id="search" placeholder="Search">
-          <i class="fa fa-search form-control-feedback"></i>
+         
+            <ul class="nav nav-pills">
+              <li role="presentation">
+
+                <label class="control-label sr-only" for="search">Search</label>
+                <input type="text" class="form-control" id="search" placeholder="Search">
+                <i class="fa fa-search form-control-feedback"></i>
+
+              </li>
+
+
+
+
+              
+
+
+
+              <li role="presentation">
+
+                <!--<a href="#" onclick="updateLink(this, 'DELETE');">
+                  <button >上传文件</button>
+                </a>-->
+
+
+              <label for="file-upload" class="custom-file-upload">
+                <i class="fa fa-cloud-upload"></i> Upload
+              </label>
+              <input id="file-upload" type="file"/>
+
+              </li>
+
+              <li role="presentation">
+
+
+              <label for="" class="custom-file-upload">
+                <i class="fa fa-folder-o" aria-hidden="true"></i> MKDir
+              </label>
+                <!--<a href="#" onclick="updateLink(this, 'DELETE');">
+                  <button>创建目录</button>
+                </a>-->
+
+
+              </li>
+
+            </ul>
          </div>
       </div>
     </div>
@@ -46,17 +115,17 @@
     <ul class="nav nav-pills">
       <li role="presentation">
         <a href="#" onclick="updateLink(this, 'DOWNLOAD');">
-          <button>下载</button>
+          <button>Download</button>
         </a>
       </li>
       <li role="presentation">
         <a href="#" onclick="updateLink(this, 'DELETE');">
-          <button>删除</button>
+          <button>Delete</button>
         </a>
       </li>
       <li role="presentation">
         <a href="#" onclick="updateLink(this, 'RENAME');">
-          <button>重命名</button>
+          <button>Rename</button>
         </a>
       </li>
     </ul>
@@ -76,7 +145,7 @@
         <tfoot>
           <tr>
             <td colspan="4">
-              <small class="pull-left text-muted" dir="ltr">3 folders and 15 files, 17.62 MB in total</small>
+              <!--<small class="pull-left text-muted" dir="ltr">3 folders and 15 files, 17.62 MB in total</small>-->
               <!--<a class="pull-right small text-muted" href="https://github.com/idleberg/Bootstrap-Listr" title="Bootstrap Listr on GitHub" target="_blank">Fork me on GitHub</a> -->
             </td>
           </tr>
@@ -94,7 +163,7 @@
                 <a href="{{file.pathSuffix}}\">
                   <strong>{{file.pathSuffix}}</strong>
               {% else %}
-                <a href="{{file.pathSuffix}}">
+                <a href="{{file.pathSuffix}}" onclick="return false;">
                   {{file.pathSuffix}}
               {% endif %}
                 </a>
@@ -173,10 +242,50 @@
       a.href = '/dbox/v1' + path + '?op=' + op;
       //alert(a.href);
     }
+
+    //$('input[type=text]').click(function() {
+    //  $('input[type=file]').trigger('click');
+    //});
+
+    $('input[type=file]').change(function() {
+      //$('input[type=text]').val($(this).val());
+      var localfile = $(this).val();
+      var path = window.location.pathname.slice(5, -1) + '/';
+      var reqURL = '/dbox/v1' + path + '?op=UPLOAD';
+      $.ajax({
+        type: 'PUT',
+        url: reqURL,
+        success: function(response) {
+
+          var reqURL = response;
+          console.log(reqURL);
+
+          /*$.ajax({
+            type: 'PUT',
+            url: reqURL,
+            data: localfile,
+            dataType: 'file',
+
+            success: function(response) {
+              alert('haha')
+            },
+            error: function(e) {
+              alert("error: " + e);
+            }
+          }); */
+
+        },
+        error: function(e) {
+          // alert("error: " + e);
+        }
+      });
+
+
+
+    });
   </script>
 
  
-
   {% endblock %}
  
 
