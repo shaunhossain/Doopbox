@@ -75,7 +75,14 @@
               <label for="file-upload" class="custom-file-upload">
                 <i class="fa fa-cloud-upload"></i> Upload
               </label>
-              <input id="file-upload" type="file"></input>
+
+
+              <form id="uploadFile">
+                <input id="file-upload" type="file" name="sampleFile"></input>
+                <!--<input type="submit">tests~</input>-->
+              </form>
+
+
 
               </li>
 
@@ -233,36 +240,67 @@
     //});
 
     $('input[type=file]').change(function() {
-      var localfile = $(this).val().split('\\').pop();
-      var path = window.location.pathname.slice(5, -1) + '/';
-      // path += localfile;
-      console.log(path);
-      var reqURL = '/dbox/v1' + path + '?op=UPLOAD';
-      $.ajax({
-        type: 'PUT',
-        url: reqURL,
-        success: function(response) {
-          var reqURL = response;
-          console.log(reqURL);
-          /*$.ajax({
-            type: 'PUT',
-            url: reqURL,
-            data: localfile,
-            dataType: 'file',
+
+             var file = this.files[0];
+                 name = file.name;
+
+            console.log(name);
+
+             // $('form').submit(); 
+
+
+            //var formdata = new FormData($("uploadFile")[0]);
+            var formdata = new FormData();
+            formdata.append('sampleFile', file);
+            //formdata.append('file', $('#file')[0]);
+            //formdata.append(file, $('uploadFile')[0]);
+            console.log('--------------------->  ' + formdata);
+
+
+
+
+            
+          var localfile = $(this).val().split('\\').pop();
+          var path = window.location.pathname.slice(5, -1) + '/';
+          // path += localfile;
+          console.log(path);
+          var reqURL = '/dbox/v1' + path + '?op=UPLOAD';
+          $.ajax({
+            type: 'POST',
+            url: '/upload',
+
+                    data: formdata,
+                                    cache: false,
+                                                    contentType: false,
+                                                                    processData: false,
+
+
+
+
 
             success: function(response) {
-              alert('haha')
+              var reqURL = response;
+              console.log(reqURL);
+              /*$.ajax({
+                type: 'PUT',
+                url: reqURL,
+                data: localfile,
+                dataType: 'file',
+
+                success: function(response) {
+                  alert('haha')
+                },
+                error: function(e) {
+                  alert("error: " + e);
+                }
+              }); */
+
             },
             error: function(e) {
-              alert("error: " + e);
+              // alert("error: " + e);
             }
-          }); */
+          });
 
-        },
-        error: function(e) {
-          // alert("error: " + e);
-        }
-      });
     });
   </script>
   {% endblock %}

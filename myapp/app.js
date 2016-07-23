@@ -5,6 +5,7 @@ var breadcrumbs = require('express-breadcrumbs');
 var swig = require('swig');
 var bodyParser = require('body-parser')
 var mysql      = require('mysql');
+var fileUpload = require('express-fileupload');
 
 var app = express();
 
@@ -21,6 +22,7 @@ var hdfs = webhdfs.createClient({
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use('/assets', express.static(__dirname + '/assets'));
+app.use(fileUpload());
 
 app.use(breadcrumbs.init());
 //app.use(breadcrumbs.setHome());
@@ -90,6 +92,7 @@ app.get('/home*', function (request, response) {
 });
 
 app.put('/dbox/v1/*', function (request, response) {
+    console.log("+++++++++++++++++++++");
 	var username = request.session.username;
 	if (username == null) {
 		response.redirect('/');
@@ -105,7 +108,8 @@ app.put('/dbox/v1/*', function (request, response) {
 			case 'UPLOAD':
 				reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=CREATE&overwrite=true';
 
-				console.log('yyyyyyyyyyy>>>> ', reqURL);
+				console.log('putputputputpu>>>> ', reqURL);
+				console.log('putputputputpu>>>> ', request.body.name);
 
 				hdfs._sendRequest('PUT', reqURL, '', function cb(err, res, body) {
 					var location = '';
@@ -118,7 +122,9 @@ app.put('/dbox/v1/*', function (request, response) {
                         //href = res.request.uri.href;
                         href = location;
                         console.log('xxxxxxyy-----> ' + href);
-                        response.redirect(href);
+                        //response.redirect(href);
+                        response.send("xxxxxx");
+                        
 					}
                     /*if (err) {
 						console.log(err);
@@ -172,28 +178,33 @@ app.get('/dbox/v1/*', function (request, response) {
 						var href = '';
 						if (res.statusCode == 200) {
 							href = res.request.uri.href;
-							console.log('-----> ' + href);
 							response.redirect(href);
 						}
 					}
 				});
 				break;
 			case 'UPLOAD':
-				reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=CREATE&overwrite=true';
-				console.log('xxxx----->> ', reqURL);
-				hdfs._sendRequest('PUT', reqURL, '', function cb(err, res, body) {
-					var href = '';
-
-					console.log(err);
-					//console.log(res);
-					//console.log(body);
-
-					if (res.statusCode == 200) {
-						href = res.request.uri.href;
-						console.log('-----> ' + href);
-						response.send(err);
-					}
-				});
+				console.log('lalalalallaallalla.....');
+                reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=CREATE&overwrite=true';
+                console.log('yyyyyyyyyyy>>>> ', reqURL);
+                hdfs._sendRequest('PUT', reqURL, '', function cb(err, res, body) {
+                if (res.statusCode == 307) {
+                    var location = res.headers.location;
+                    console.log(location);
+                    var dstpath = location.split('?')[0];
+                    response.jsonp({DstPath:dstpath});
+                }
+                /*if (err) {
+                    console.log(err);
+                } else {
+                    var href = '';
+                    if (res.statusCode == 200) {
+                        href = res.request.uri.href;
+                        console.log('xxxxxxyy-----> ' + href);
+                        response.redirect(href);
+                    }
+                }*/
+                });
 				break;
 		}
 	}
@@ -254,6 +265,63 @@ app.post('/signin/', function (request, response) {
 	connection.end();
 });
 
+app.post('/dbox/v1/*', function (request, response) {
+	var username = request.session.username;
+    var path = request.params[0];
+	var op = request.query.op;
+    path = '/home/' + username + '/' + path;
+    var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=LISTSTATUS';
+	switch (op) {
+        case 'UPLOAD':
+            reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=CREATE&overwrite=true';
+
+            console.log('yyyyyyyyyyy>>>> ', reqURL);
+
+            hdfs._sendRequest('PUT', reqURL, '', function cb(err, res, body) {
+                var location = '';
+                if (res.statusCode == 307) {
+                    location = res.headers.location;
+                    //console.log('===================>>>> ' + location);
+                    //response.send(location);
+                    //
+                    var href = '';
+                    //href = res.request.uri.href;
+                    href = location;
+                    console.log('xxxxxxyy-----> ' + href);
+                    // response.redirect(href);
+                }
+                /*if (err) {
+                    console.log(err);
+                } else {
+                    var href = '';
+                    if (res.statusCode == 200) {
+                        href = res.request.uri.href;
+                        console.log('xxxxxxyy-----> ' + href);
+                        response.redirect(href);
+                    }
+                }*/
+            });
+            break;
+	}
+});
+
+app.post('/upload', function(req, res) {
+    console.log(req);
+    var sampleFile;
+    if (!req.files) {
+        res.send('No files were uploaded.');
+        return;
+    }
+    sampleFile = req.files.sampleFile;
+    sampleFile.mv('filename.jpg', function(err) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.send('File uploaded!');
+        }
+    });
+});
+
 app.post('/signup/', function (request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
@@ -300,6 +368,6 @@ app.get('/signup/', function (request, response) {
 	response.send(page)
 });
 
-app.listen(80, function () {
-  console.log('Example app listening on port 80!');
+app.listen(8080, function () {
+  console.log('Example app listening on port 8080!');
 });
