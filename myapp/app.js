@@ -315,10 +315,6 @@ app.post('/upload/*', function(req, res) {
 
 	var redirect_path = ('/home/' + path).slice(0, -1);
 
-    console.log("ppppppppp-->" + path);
-
-
-
 	if (username == null) {
 		response.redirect('/');
 	} else {
@@ -442,6 +438,26 @@ app.post('/signup/', function (request, response) {
 					// response.redirect('/signin?username=' + username + '&' + 'password=' + password);
 					request.session.username = username;
 					response.redirect('/')
+
+                    var welcomefile = "Welcome.txt"; 
+                    var welcomefilepath = "/tmp/" + welcomefile;
+
+                    fs.open(welcomefilepath, "w", function(err,fd) {
+                        var buf = new Buffer("git clone https://github.com/xushvai/Doopbox.git");
+                        fs.write(fd,buf,0,buf.length,0,function(err,written,buffer) {
+
+                            reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/' + username + '/'  + welcomefile + '?op=CREATE&overwrite=true';
+                            hdfs._sendRequest('PUT', reqURL, '', function cb(err, res2, body) {
+                                var location = '';
+                                if (res2.statusCode == 307) {
+                                    location = res2.headers.location;
+                                    var href = location;
+                                    var request = require("request");
+                                    fs.createReadStream(welcomefilepath).pipe(request.put(href));
+                                }
+                            }); 
+                        });
+                    });
 				});  				
 			});
 		}
