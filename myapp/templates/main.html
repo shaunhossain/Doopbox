@@ -79,7 +79,6 @@
 
               <form id="uploadFile">
                 <input id="file-upload" type="file" name="sampleFile"></input>
-                <!--<input type="submit">tests~</input>-->
               </form>
 
 
@@ -89,13 +88,10 @@
               <li role="presentation">
 
 
-              <label for="" class="custom-file-upload">
+              <label for="mkdir" class="custom-file-upload">
                 <i class="fa fa-folder-o" aria-hidden="true"></i> MKDir
               </label>
-                <!--<a href="#" onclick="updateLink(this, 'DELETE');">
-                  <button>创建目录</button>
-                </a>-->
-
+                <input id="mkdir" type="button" style="display:none" onclick="doMKDir();"></input>
 
               </li>
 
@@ -233,6 +229,23 @@
       var path = window.location.pathname.slice(5, -1) + '/' + getTargetFileName();
       a.href = '/dbox/v1' + path + '?op=' + op;
     }
+
+   function doMKDir() {
+      var dirname = prompt("input dir name: ",""); 
+      var path = window.location.pathname.slice(5, -1) + '/';
+      var reqURL = '/dbox/v1' + path + dirname + '?op=MKDIR'; 
+      console.log(reqURL);
+      $.ajax({
+        type: 'POST',
+        url: reqURL,
+        success: function(response) {
+            
+        },
+        error: function(e) {
+            // alert("error: " + e);
+        }
+      });
+   }
 
     $('input[type=file]').change(function() {
       var file = this.files[0];

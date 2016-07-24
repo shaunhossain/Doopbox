@@ -270,10 +270,20 @@ app.post('/signin/', function (request, response) {
 app.post('/dbox/v1/*', function (request, response) {
 	var username = request.session.username;
     var path = request.params[0];
+	var redirect_path = ('/home/' + path).slice(0, -1);
 	var op = request.query.op;
     path = '/home/' + username + '/' + path;
     var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=LISTSTATUS';
 	switch (op) {
+        case 'MKDIR':
+            reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=MKDIRS';
+  		    console.log(reqURL);
+  			hdfs._sendRequest('PUT', reqURL, '', function cb(err, res, body) {
+                response.redirect(redirect_path);
+  		        console.log("redirect == >> "  + redirect_path);
+            });
+            break;
+           
         case 'UPLOAD':
             reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=CREATE&overwrite=true';
 
