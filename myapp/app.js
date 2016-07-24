@@ -171,6 +171,7 @@ app.get('/dbox/v1/*', function (request, response) {
 					//response.send(page)
 				});
 				break;
+           
 			case 'DOWNLOAD':
 				reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=OPEN';
 				hdfs._sendRequest('GET', reqURL, '', function cb(err, res, body) {
@@ -283,7 +284,22 @@ app.post('/dbox/v1/*', function (request, response) {
   		        console.log("redirect == >> "  + redirect_path);
             });
             break;
-           
+        case 'RENAME':
+            var newname = request.query.nn;
+            var oldname = request.query.on;
+            var curpath = path; 
+            var oldpath = curpath + oldname;
+            var newpath = curpath + newname;
+            console.log('oldpath --------> ' + oldpath);
+            console.log('newpath --------> ' + newpath);
+
+            reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + oldpath + '?op=RENAME&destination=' + newpath;
+            console.log(reqURL);
+            hdfs._sendRequest('PUT', reqURL, '', function cb(err, res, body) {
+                response.redirect(redirect_path);
+            });
+            break;
+      
         case 'UPLOAD':
             reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1' + path + '?op=CREATE&overwrite=true';
 

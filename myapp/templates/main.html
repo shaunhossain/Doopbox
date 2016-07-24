@@ -112,7 +112,7 @@
         </a>
       </li>
       <li role="presentation">
-        <a href="#" onclick="updateLink(this, 'RENAME');">
+        <a href="#" onclick="doRename();">
           <button>Rename</button>
         </a>
       </li>
@@ -246,6 +246,23 @@
         }
       });
    }
+     function doRename() {
+      var newname = prompt("input new name: ",""); 
+      var path = window.location.pathname.slice(5, -1) + '/';
+      var reqURL = '/dbox/v1' + path + '?op=RENAME&nn=' + newname + '&on=' + getTargetFileName().replace('\\', ''); 
+      console.log(reqURL);
+      $.ajax({
+        type: 'POST',
+        url: reqURL,
+        success: function(response) {
+            
+        },
+        error: function(e) {
+            // alert("error: " + e);
+        }
+      });
+    }
+
 
     $('input[type=file]').change(function() {
       var file = this.files[0];
