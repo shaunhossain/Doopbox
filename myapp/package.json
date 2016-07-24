@@ -12,8 +12,10 @@
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "express-fileuploader": "0.0.7",
+    "mkdirp": "^0.5.1",
     "pug": "^2.0.0-beta3",
-    "swig": "^1.4.2"
+    "swig": "^1.4.2",
+    "webhdfs": "^0.3.0"
   },
   "devDependencies": {
     "nodemon": "^1.9.2"

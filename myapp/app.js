@@ -6,6 +6,8 @@ var swig = require('swig');
 var bodyParser = require('body-parser')
 var mysql      = require('mysql');
 var fileUpload = require('express-fileupload');
+var mkdirp = require('mkdirp');
+var fs = require('fs');
 
 var app = express();
 
@@ -305,21 +307,106 @@ app.post('/dbox/v1/*', function (request, response) {
 	}
 });
 
-app.post('/upload', function(req, res) {
+app.post('/upload/*', function(req, res) {
     console.log(req);
-    var sampleFile;
-    if (!req.files) {
-        res.send('No files were uploaded.');
-        return;
-    }
-    sampleFile = req.files.sampleFile;
-    sampleFile.mv('filename.jpg', function(err) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.send('File uploaded!');
+
+	var username = req.session.username;
+    var path = req.params[0];
+
+	var redirect_path = ('/home/' + path).slice(0, -1);
+
+    console.log("ppppppppp-->" + path);
+
+
+
+	if (username == null) {
+		response.redirect('/');
+	} else {
+
+        mkdirp('/tmp/doopbox/home/' + username + '/' + path, function (err) {
+                if (err) console.error(err)
+                else console.log('create dir: ' + '/tmp/doopbox/home/' + username + '/' + path);
+        });
+
+        var sampleFile;
+        if (!req.files) {
+            res.send('No files were uploaded.');
+            return;
         }
-    });
+        sampleFile = req.files.sampleFile;
+        var filepath = '/tmp/doopbox/home/' + username + '/' + path + sampleFile.name;
+        sampleFile.mv(filepath, function(err) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                // res.send('File uploaded!');
+            }
+        });
+        console.log('kkkkkk->' + filepath);
+        // write to HDFS
+        /*var localFileStream = fs.createReadStream(filepath);
+        var remoteFileStream = hdfs.createWriteStream('/home/' + username + '/' + path + sampleFile.name);
+        localFileStream.pipe(remoteFileStream);
+        remoteFileStream.on('error', function onError (err) {
+              // Do something with the error 
+            console.log("error!");
+        });
+        remoteFileStream.on('finish', function onFinish () {
+            console.log("ok!");
+            // Upload is done 
+            res.send('File uploaded!');
+        });*/
+        reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/' + username + '/' + path + sampleFile.name + '?op=CREATE&overwrite=true';
+
+        console.log('yyyyyyyyyyy>>>> ', reqURL);
+
+        hdfs._sendRequest('PUT', reqURL, '', function cb(err, res2, body) {
+            var location = '';
+            if (res2.statusCode == 307) {
+                location = res2.headers.location;
+                //console.log('===================>>>> ' + location);
+                //response.send(location);
+                //
+                var href = '';
+                //href = res.request.uri.href;
+                href = location;
+                console.log('xxxxxxyy-----> ' + href);
+                // response.redirect(href);
+                // write file to HDFS.
+                //fs.createReadStream('somefile.zip').pipe(req);
+                var request = require("request");
+
+                /*request({
+                      uri: href,
+                      method: "PUT",
+                      //timeout: 10000,
+                      //followRedirect: true,
+                      //maxRedirects: 10
+                }, function(error, response, body) {
+                      console.log(body);
+                });*/
+                /*console.log('xxxx---> ' + href);
+                console.log('xxxx---> ' + filepath);
+                request(href).pipe(fs.createWriteStream(filepath));*/
+                fs.createReadStream(filepath).pipe(request.put(href));
+                //res.redirect(redirect_path);
+              console.log(" -------- xxxx --- > " + redirect_path);
+               res.send('File uploaded!');
+               //res.redirect(redirect_path);
+            }
+            /*if (err) {
+                console.log(err);
+            } else {
+                var href = '';
+                if (res.statusCode == 200) {
+                    href = res.request.uri.href;
+                    console.log('xxxxxxyy-----> ' + href);
+                    response.redirect(href);
+                }
+            }*/
+        });
+
+    }
 });
 
 app.post('/signup/', function (request, response) {
@@ -348,7 +435,8 @@ app.post('/signup/', function (request, response) {
   				if (err) throw err;
   				var accid = results.insertId;
   				// request HDFS mkdir.
-  				var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/' + accid + '?op=MKDIRS';
+  				//var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/' + accid + '?op=MKDIRS';
+  				var reqURL = 'http://' + svrHost + ':' + svrPort + '/webhdfs/v1/home/' + username + '?op=MKDIRS';
   				console.log(reqURL);
   				hdfs._sendRequest('PUT', reqURL, '', function cb(err, res, body) {
 					// response.redirect('/signin?username=' + username + '&' + 'password=' + password);
